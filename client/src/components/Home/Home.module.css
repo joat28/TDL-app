@@ -4,10 +4,14 @@
   display:flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 .homeHeader{
   display: flex;
+  width:50vw;
   flex-direction: column;
   justify-content: space-between;
-  
+}
+.homeHeader > div {
+  margin-bottom: 3vh;
 }
