@@ -19,7 +19,7 @@ const Login = () => {
 						variant="outlined"
 					/>
 					<Button color="primary" variant="contained">
-						 Login 
+						Login 
 					</Button>
 				</div>
 			</form>
