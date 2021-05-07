@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+//Connection to MongoDB atlas:
 //Mongoose connect
 const DB = process.env.DB_URI;
 mongoose
@@ -31,8 +32,6 @@ app.use(cors());
 // if (process.env.NODE_ENV !== 'production') {
 // }
 
-// Connection to Mongoose:
-mongoose.connect("mongodb://localhost:27017/tdl");
 
 app.get("/", (req, res) => {
 	res.send("Hey, this is the To to list app");
@@ -53,7 +52,14 @@ app.post("/api/register", async (req, res) => {
 
 	try {
 		const newUser = new User({ email, password, name });
-		await newUser.save();
+		await newUser.save((error, user) => {
+			if (error) throw error;
+			res.json({
+				status: "ok",
+				message: "check logs",
+				user: user
+			});
+		});
 	} catch (error) {
 		res.json({
 			status: "error",
@@ -61,9 +67,6 @@ app.post("/api/register", async (req, res) => {
 			ps: "Duplicate email",
 		});
 	}
-	res.json({
-		status: "ok",
-		message: "check logs",
-	});
+	
 });
 app.listen(1337, () => console.log("Server running ..... "));
