@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import TLD from './components/TDL';
+import TDL from './components/TDL';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<TLD />
+		<TDL />
 	</React.StrictMode>,
 	document.getElementById("root")
 );

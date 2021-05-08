@@ -20,6 +20,11 @@ const Register = () => {
 			},
 		}).then((res) => res.json());
 		console.log(data);
+		if (data.status === "ok") {
+			alert("You are logged in - from Register");
+		} else {
+			alert(`Error : ${data.error} \n Message : ${data.message}`);
+		}
 	}
 	return (
 		<div className={styles.Register}>

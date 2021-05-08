@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -32,21 +32,18 @@ app.use(cors());
 // if (process.env.NODE_ENV !== 'production') {
 // }
 
-
 app.get("/", (req, res) => {
 	res.send("Hey, this is the To to list app");
 });
 
 app.post("/api/register", async (req, res) => {
 	console.log(req.body);
-
-	// TODO: hash the password using bcrypt
-
 	const { email, password, name } = req.body;
 	if (email == "" || password == "" || name == "") {
 		return res.json({
 			status: "error",
 			message: "Invalid, email, password, name",
+			error: "Invalid, email/password/name"
 		});
 	}
 
@@ -57,16 +54,57 @@ app.post("/api/register", async (req, res) => {
 			res.json({
 				status: "ok",
 				message: "check logs",
-				user: user
+				user: user,
 			});
 		});
 	} catch (error) {
 		res.json({
 			status: "error",
-			message: error.message,
-			ps: "Duplicate email",
+			error: error,
+			message: "Duplicate email",
 		});
 	}
-	
 });
+
+app.post("/api/login", (req, res) => {
+	const { email, password } = req.body;
+	if (email == "" || password == "") {
+		return res.json({
+			status: "error",
+			error : "That Email/Password not allowed, change it",
+			message: "Invalid, email, password"
+		});
+	}
+	User.findOne({ email }, (error, userFound) => {
+		if (error) {
+			return res.json({
+				status: "error",
+				error: error,
+				message: "error in retrieving data",
+			});
+		}
+		if (!userFound) {
+			return res.json({
+				status: "error",
+				error: "Sorry, no user Found",
+				message: "Invalid, Credentials/No user found",
+			});
+		}
+
+		userFound.comparePasswords(password, function (error, isMatch) {
+			if (error)
+				return res.json({
+					status: "error",
+					message: "Error in comparing passwords",
+					error: error,
+				});
+			return res.json({
+				status: "ok",
+				message: "Password Comparision process success",
+				isAuthorized: isMatch,
+			});
+		});
+	});
+});
+
 app.listen(1337, () => console.log("Server running ..... "));

@@ -33,5 +33,13 @@ UserModel.pre("save", async function save(next) {
 		return next(err);
 	}
 });
+
+UserModel.methods.comparePasswords = function (userPassword, callback) {
+	bcrypt.compare(userPassword, this.password, function (error, isMatch) {
+		if (error) return callback(error);
+		return callback(null, isMatch);
+	});
+}
+
 const model = mongoose.model("UserModel", UserModel);
 module.exports = model;
